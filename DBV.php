@@ -40,6 +40,7 @@ class DBV
     protected $_adapter;
     protected $_log = array();
 	protected $_revisions = array();
+	public $run_revisions = array();
 	
 	private function __construct() {
 		$this->_loadRunRevisions();
@@ -102,7 +103,6 @@ class DBV
         if ($this->_getAdapter()) {
             $this->schema = $this->_getSchema();
             $this->_revisions = $this->_getRevisions();
-            $this->run_revisions = array_flip($this->_revisions);
         }
 
         $this->_view("index");
@@ -343,15 +343,15 @@ class DBV
     {
         $file = DBV_META_PATH . DS . 'revision';
         if (file_exists($file)) {
-            return $this->_revisions = json_decode(file_get_contents($file));
+            return $this->run_revisions = json_decode(file_get_contents($file));
         }
     }
 
     protected function _markRevisionAsRun($revision)
     {
-		$this->_revisions[] = $revision;
+		$this->run_revisions[] = $revision;
         $file = DBV_META_PATH . DS . 'revision';
-        if (!@file_put_contents($file, json_encode(array_unique($this->_revisions)))) {
+        if (!@file_put_contents($file, json_encode(array_unique($this->run_revisions)))) {
             $this->error("Cannot write revision file");
         }
     }

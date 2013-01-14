@@ -11,9 +11,10 @@
 				</tr>
 			</thead>
 			<tbody>
+				<?php $run_revisions = array_flip($this->run_revisions); ?>
 				<?php foreach ($this->_revisions as $revision) { ?>
 					<?php
-						$ran = array_key_exists($revision, $this->run_revisions);
+						$ran = array_key_exists($revision, $run_revisions);
 						$class = array();
 						if ($ran) {
 							$class[] = 'ran';
